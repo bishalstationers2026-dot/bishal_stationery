@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { db } from "../firebase";
+
 import {
 collection,
 addDoc,
@@ -30,18 +31,20 @@ const productsRef = collection(db,"products");
 // LOAD PRODUCTS
 useEffect(()=>{
 loadProducts();
-},[]);
+},[loadProducts]);
 
-const loadProducts = async()=>{
+const loadProducts = useCallback(async () => {
+
 const data = await getDocs(productsRef);
 
 setProducts(
-data.docs.map(doc=>({
+data.docs.map(doc => ({
 ...doc.data(),
-id:doc.id
+id: doc.id
 }))
 );
-};
+
+}, [productsRef]);
 
 // CLOUDINARY UPLOAD
 const uploadImage = async (image) => {

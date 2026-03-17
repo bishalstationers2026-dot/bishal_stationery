@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { db } from "../firebase";
 
 import jsPDF from "jspdf";
@@ -24,20 +24,22 @@ const productsRef = collection(db,"products");
 const [search,setSearch] = useState("");
 
 // LOAD PRODUCTS
-useEffect(() => {
+useEffect(()=>{
 loadProducts();
-}, []);
+},[loadProducts]);
 
-const loadProducts = async()=>{
+const loadProducts = useCallback(async () => {
+
 const data = await getDocs(productsRef);
 
 setProducts(
-data.docs.map(doc=>({
+data.docs.map(doc => ({
 ...doc.data(),
-id:doc.id
+id: doc.id
 }))
 );
-};
+
+}, [productsRef]);
 
 // ADD TO CART
 const addToCart = (product)=>{
