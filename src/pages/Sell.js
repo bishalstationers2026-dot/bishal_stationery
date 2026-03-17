@@ -24,22 +24,20 @@ const productsRef = collection(db,"products");
 const [search,setSearch] = useState("");
 
 // LOAD PRODUCTS
-useEffect(()=>{
-loadProducts();
-},[loadProducts]);
-
 const loadProducts = useCallback(async () => {
+    const data = await getDocs(productsRef);
 
-const data = await getDocs(productsRef);
+    setProducts(
+      data.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+      }))
+    );
+  }, [productsRef]);
 
-setProducts(
-data.docs.map(doc => ({
-...doc.data(),
-id: doc.id
-}))
-);
-
-}, [productsRef]);
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
 
 // ADD TO CART
 const addToCart = (product)=>{
