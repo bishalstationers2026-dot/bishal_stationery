@@ -7,6 +7,7 @@ return(
 <div style={{
 width:"200px",
 background:"#222",
+
 color:"white",
 height:"100vh",
 padding:"20px"
